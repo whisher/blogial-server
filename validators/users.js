@@ -1,9 +1,16 @@
 var Joi = require('joi');
 
-exports.save = {
+exports.signup = {
   body: {
-    firstname: Joi.string().regex(/[a-zA-Z0-9]{3,30}/).required(),
-    lastname: Joi.string().regex(/[a-zA-Z0-9]{3,30}/).required(),
     email: Joi.string().email().required(),
+    password: Joi.string().required(),
+    username: Joi.string().required()
+  }
+};
+
+exports.login = {
+  body: {
+    email: Joi.string().email().required(),
+    password: Joi.string().required()
   }
 };

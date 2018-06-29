@@ -4,11 +4,21 @@ const validate = require('express-validation');
 
 const controllers = require('../controllers/users');
 const validators = require('../validators/users');
+const jwtVerify = require('../middleware/jwt-verify');
 
-router.get('/', controllers.find);
-router.post('/', validate(validators.save), controllers.save);
-router.get('/:id', controllers.findById);
-router.put('/:id', controllers.update);
-router.delete('/:id', controllers.delete);
+router.get('/account',
+  jwtVerify,
+  controllers.account
+);
+
+router.post('/login',
+  validate(validators.login),
+  controllers.login
+);
+
+router.post('/signup',
+  validate(validators.signup),
+  controllers.signup
+);
 
 module.exports = router;
