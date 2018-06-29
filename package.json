@@ -2,9 +2,9 @@
   "name": "remagi",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/app.js",
   "scripts": {
-    "start": "DEBUG=api:server node ./bin/www"
+    "start": "DEBUG=api:server NODE_ENV=developer nodemon ./bin/www"
   },
   "keywords": [],
   "author": "",
@@ -22,5 +22,8 @@
     "mongoose": "^5.1.6",
     "mongoose-unique-validator": "^2.0.1",
     "multer": "^1.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.5"
   }
 }
