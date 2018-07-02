@@ -4,7 +4,7 @@
   "description": "",
   "main": "./src/app.js",
   "scripts": {
-    "start": "DEBUG=api:server NODE_ENV=developer nodemon ./bin/www"
+    "start": "DEBUG=api:server NODE_ENV=development nodemon ./bin/www"
   },
   "keywords": [],
   "author": "",

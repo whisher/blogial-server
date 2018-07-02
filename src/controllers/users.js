@@ -8,9 +8,16 @@ const UserAccessInfo = require('../models/users');
 exports.signup = (req, res, next) => {
   bcrypt.hash(req.body.password, 10).then(hash => {
     const userAccessInfo = new UserAccessInfo({
+      city: req.body.city,
+      company_name: req.body.company_name,
+      company_city: req.body.company_city,
+      company_website: req.body.company_website,
       email: req.body.email,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
       password: hash,
-      username: req.body.username,
+      role: req.body.role,
+      username: req.body.username
     });
     userAccessInfo.save()
     .then(user => {

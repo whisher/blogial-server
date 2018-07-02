@@ -3,23 +3,11 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const mongoose = require('mongoose');
-
-const debug = require('debug')('api:server');
-
 const app = express();
 
-const uri = 'mongodb+srv://ilwebdifabio:MdMxemXzx3KkSrA3@cluster0-uycvd.mongodb.net/development';
-mongoose
-  .connect(
-    uri
-  )
-  .then(() => {
-    debug('Connected to database!');
-  })
-  .catch(() => {
-    debug('Connection failed!');
-  });
+const isProd = (process.env.NODE_ENV === 'production');
+
+require('./db/connect')(isProd);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -35,6 +23,16 @@ app.use('/users', users);
 // error validation handler
 app.use(function(err, req, res, next){
   res.status(400).json(err);
+});
+
+// ping
+app.get('/ping', function(req, res){
+  res.send('pong', 200);
+});
+
+// 404
+app.get('/*', function(req, res){
+  res.send(404);
 });
 
 module.exports = app;
