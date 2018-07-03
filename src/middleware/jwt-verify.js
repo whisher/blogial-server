@@ -1,3 +1,4 @@
+'use strict';
 const jwt = require('jsonwebtoken');
 
 const config = require('../config/config');
@@ -9,7 +10,7 @@ module.exports = (req, res, next) => {
     req.userData = {
       email: decodedToken.email,
       userId: decodedToken.userId,
-      username: decodedToken.username,
+      username: decodedToken.username
     };
     next();
   } catch (error) {

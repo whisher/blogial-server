@@ -1,3 +1,5 @@
+/*eslint max-len: ["error", { "code": 100 }]*/
+'use strict';
 const mongoose = require('mongoose');
 const debug = require('debug')('api:server');
 
@@ -14,6 +16,6 @@ const connection = (isProd) => {
     .catch(() => {
       debug('Connection failed!');
     });
-}
+};
 
 module.exports = connection;

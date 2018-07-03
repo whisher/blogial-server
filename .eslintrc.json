@@ -1,1 +1,15 @@
-{"extends": "strongloop"}
+{
+  "extends": "strongloop",
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "rules": {
+    "comma-dangle": ["error", {
+      "arrays": "never",
+      "objects": "never",
+      "imports": "never",
+      "exports": "never",
+      "functions": "never"
+    }]
+  }
+}

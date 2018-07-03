@@ -1,4 +1,5 @@
-var Joi = require('joi');
+'use strict';
+const Joi = require('joi');
 
 exports.signup = {
   body: {

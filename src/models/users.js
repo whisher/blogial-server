@@ -1,3 +1,5 @@
+/*eslint max-len: ["error", { "code": 100 }]*/
+'use strict';
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
@@ -10,7 +12,7 @@ const userAccessInfoSchema = mongoose.Schema({
   firstname: { type: String, required: true },
   lastname: { type: String, required: true },
   password: { type: String, required: true },
-  role: { type: String, required: true, enum:['admin', 'company', 'freelancer', 'pm'] },
+  role: { type: String, required: true, enum: ['admin', 'company', 'freelancer', 'pm'] },
   username: { type: String, required: true }
 });
 

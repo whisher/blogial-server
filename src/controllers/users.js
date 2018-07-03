@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+'use strict';
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -19,10 +19,9 @@ exports.signup = (req, res, next) => {
       role: req.body.role,
       username: req.body.username
     });
-    userAccessInfo.save()
-    .then(user => {
+    userAccessInfo.save().then(user => {
       const token = jwt.sign(
-        { userId: user._id, email: user.email, username: user.username  },
+        { userId: user._id, email: user.email, username: user.username },
         config.secret,
         { expiresIn: '1h' }
       );
@@ -30,12 +29,11 @@ exports.signup = (req, res, next) => {
         token: token,
         expiresIn: 3600
       });
-    })
-    .catch(error => {
+    }).catch(error => {
       res.status(500).json(error);
     });
   });
-}
+};
 
 exports.login = (req, res, next) => {
   let fetchedUser;
@@ -47,15 +45,14 @@ exports.login = (req, res, next) => {
         });
       }
       fetchedUser = user;
-      bcrypt.compare(req.body.password, user.password)
-      .then(result => {
+      bcrypt.compare(req.body.password, user.password).then(result => {
         if (!result) {
           return res.status(401).json({
             message: 'Auth failed'
           });
         }
         const token = jwt.sign(
-          { userId: user._id, email: user.email, username: user.username  },
+          { userId: user._id, email: user.email, username: user.username },
           config.secret,
           { expiresIn: '1h' }
         );
@@ -63,15 +60,15 @@ exports.login = (req, res, next) => {
           token: token,
           expiresIn: 3600
         });
-      })
+      });
     })
     .catch(err => {
       return res.status(401).json({
         message: 'Auth failed'
     });
   });
-}
+};
 
 exports.account = (req, res, next) => {
   res.status(200).json(req.userData);
-}
+};
