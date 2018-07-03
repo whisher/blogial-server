@@ -4,6 +4,7 @@
   "description": "",
   "main": "./src/app.js",
   "scripts": {
+    "pretest": "eslint --ignore-path .gitignore .",
     "start": "DEBUG=api:server NODE_ENV=development nodemon ./bin/www"
   },
   "keywords": [],
@@ -24,6 +25,8 @@
     "multer": "^1.3.0"
   },
   "devDependencies": {
+    "eslint": "^5.0.1",
+    "eslint-config-strongloop": "^2.1.0",
     "nodemon": "^1.17.5"
   }
 }
