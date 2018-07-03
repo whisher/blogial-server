@@ -1,3 +1,4 @@
+/*eslint max-len: ["error", { "code": 130 }]*/
 'use strict';
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -21,7 +22,7 @@ exports.signup = (req, res, next) => {
     });
     userAccessInfo.save().then(user => {
       const token = jwt.sign(
-        { userId: user._id, email: user.email, username: user.username },
+        { userId: user._id, email: user.email, username: user.username, avatar: user.avatar, hasWelcome: user.hasWelcome },
         config.secret,
         { expiresIn: '1h' }
       );
@@ -52,7 +53,7 @@ exports.login = (req, res, next) => {
           });
         }
         const token = jwt.sign(
-          { userId: user._id, email: user.email, username: user.username },
+          { userId: user._id, email: user.email, username: user.username, avatar: user.avatar, hasWelcome: user.hasWelcome },
           config.secret,
           { expiresIn: '1h' }
         );

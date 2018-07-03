@@ -4,12 +4,14 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const userAccessInfoSchema = mongoose.Schema({
+  avatar: { type: String, default: null },
   city: { type: String },
   company_name: { type: String },
   company_city: { type: String },
   company_website: { type: String },
   email: { type: String, index: true, unique: true, required: true },
   firstname: { type: String, required: true },
+  hasWelcome: { type: Boolean, default: true },
   lastname: { type: String, required: true },
   password: { type: String, required: true },
   role: { type: String, required: true, enum: ['admin', 'company', 'freelancer', 'pm'] },
