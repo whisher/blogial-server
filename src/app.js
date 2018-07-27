@@ -28,12 +28,12 @@ app.use(function(err, req, res, next){
 
 // ping
 app.get('/ping', function(req, res){
-  res.send('pong', 200);
+  res.status(200).send('pong');
 });
 
 // 404
 app.get('/*', function(req, res){
-  res.send(404);
+  res.sendStatus(404);
 });
 
 module.exports = app;

@@ -5,7 +5,8 @@
   "main": "./src/app.js",
   "scripts": {
     "pretest": "eslint --ignore-path .gitignore .",
-    "start": "DEBUG=api:server NODE_ENV=development nodemon ./bin/www"
+    "start": "DEBUG=api:server node ./bin/www",
+    "start:dev": "DEBUG=api:server NODE_ENV=development nodemon ./bin/www"
   },
   "keywords": [],
   "author": "",
