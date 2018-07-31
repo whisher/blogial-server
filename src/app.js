@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 
-app.use('/images', express.static(path.join(process.cwd(),'assets/images')));
+app.use('/images', express.static(path.join(process.cwd(), 'assets/images')));
 
 const users = require('./routes/users');
 

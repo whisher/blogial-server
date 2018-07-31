@@ -9,10 +9,7 @@ const UserAccessInfo = require('../models/users');
 exports.signup = (req, res, next) => {
   bcrypt.hash(req.body.password, 10).then(hash => {
     const userAccessInfo = new UserAccessInfo({
-      city: req.body.city,
-      company_name: req.body.company_name,
-      company_city: req.body.company_city,
-      company_website: req.body.company_website,
+      display_name: req.body.display_name,
       email: req.body.email,
       firstname: req.body.firstname,
       lastname: req.body.lastname,
@@ -53,7 +50,14 @@ exports.login = (req, res, next) => {
           });
         }
         const token = jwt.sign(
-          { userId: user._id, email: user.email, username: user.username, avatar: user.avatar, hasWelcome: user.hasWelcome },
+          {
+            avatar: user.avatar,
+            display_name: user.display_name,
+            email: user.email,
+            role: user.role,
+            userId: user._id,
+            username: user.username
+          },
           config.secret,
           { expiresIn: '1h' }
         );

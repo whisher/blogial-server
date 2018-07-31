@@ -3,6 +3,7 @@ const Joi = require('joi');
 
 exports.signup = {
   body: {
+    display_name: Joi.string().required(),
     email: Joi.string().email().required(),
     firstname: Joi.string().required(),
     password: Joi.string().required(),
