@@ -9,8 +9,9 @@ module.exports = (req, res, next) => {
     const decodedToken = jwt.verify(token, config.secret);
     req.userData = {
       avatar: decodedToken.avatar,
+      display_name: decodedToken.display_name,
       email: decodedToken.email,
-      hasWelcome: decodedToken.hasWelcome,
+      role: decodedToken.role,
       userId: decodedToken.userId,
       username: decodedToken.username
     };

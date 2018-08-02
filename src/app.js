@@ -17,9 +17,13 @@ app.use(cors());
 
 app.use('/images', express.static(path.join(process.cwd(), 'assets/images')));
 
+// Users
 const users = require('./routes/users');
-
 app.use('/users', users);
+
+// Posts
+const posts = require('./routes/posts');
+app.use('/posts', posts);
 
 // error validation handler
 app.use(function(err, req, res, next){

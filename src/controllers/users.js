@@ -19,7 +19,14 @@ exports.signup = (req, res, next) => {
     });
     userAccessInfo.save().then(user => {
       const token = jwt.sign(
-        { userId: user._id, email: user.email, username: user.username, avatar: user.avatar, hasWelcome: user.hasWelcome },
+        {
+          avatar: user.avatar,
+          display_name: user.display_name,
+          email: user.email,
+          role: user.role,
+          userId: user._id,
+          username: user.username
+        },
         config.secret,
         { expiresIn: '1h' }
       );
