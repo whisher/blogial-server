@@ -37,7 +37,8 @@ exports.update = (req, res, next) => {
     author: req.body.author,
     content: req.body.content,
     status: req.body.status,
-    title: req.body.title
+    title: req.body.title,
+    updated: Date.now()
   };
   PostAccessInfoSchema.updateOne({ _id: req.params.id }, {$set: post})
     .then(post => {
