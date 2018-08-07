@@ -28,4 +28,9 @@ router.put('/:id',
   controllers.update
 );
 
+router.delete('/:id',
+  jwtVerify,
+  controllers.delete
+);
+
 module.exports = router;
