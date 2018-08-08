@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
       display_name: decodedToken.display_name,
       email: decodedToken.email,
       role: decodedToken.role,
-      userId: decodedToken.userId,
+      _id: decodedToken._id,
       username: decodedToken.username
     };
     next();

@@ -3,15 +3,15 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
-const postAccessInfoSchema = mongoose.Schema({
-  author: { type: String, required: true },
+const postSchema = mongoose.Schema({
+  author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   content: { type: String, required: true },
   created: { type: Date, default: Date.now },
-  status: { type: String, required: true, enum: ['draft', 'published'] },
+  isDraft: { type: Boolean},
   title: { type: String, required: true },
   updated: { type: Date, default: Date.now }
 });
 
-postAccessInfoSchema.plugin(uniqueValidator);
+postSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model('postAccessInfo', postAccessInfoSchema);
+module.exports = mongoose.model('Post', postSchema);

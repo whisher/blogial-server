@@ -24,7 +24,7 @@ exports.signup = (req, res, next) => {
           display_name: user.display_name,
           email: user.email,
           role: user.role,
-          userId: user._id,
+          _id: user._id,
           username: user.username
         },
         config.secret,
@@ -62,7 +62,7 @@ exports.login = (req, res, next) => {
             display_name: user.display_name,
             email: user.email,
             role: user.role,
-            userId: user._id,
+            _id: user._id,
             username: user.username
           },
           config.secret,

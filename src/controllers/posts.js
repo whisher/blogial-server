@@ -1,15 +1,15 @@
 /*eslint max-len: ["error", { "code": 130 }]*/
 'use strict';
-const PostAccessInfoSchema = require('../models/posts');
+const Post = require('../models/posts');
 
 exports.create = (req, res, next) => {
-  const postAccessInfo = new PostAccessInfoSchema({
-    author: req.body.author,
+  const postInfo = new Post({
+    author: req.userData,
     content: req.body.content,
     status: req.body.status,
     title: req.body.title
   });
-  postAccessInfo.save().then(post => {
+  postInfo.save().then(post => {
     res.status(200).json(post);
   }).catch(error => {
     res.status(500).json(error);
@@ -17,15 +17,16 @@ exports.create = (req, res, next) => {
 };
 
 exports.all = (req, res, next) => {
-  PostAccessInfoSchema.find().then(posts => {
-    res.status(200).json(posts);
-  }).catch(error => {
-    res.status(500).json(error);
-  });
+  Post.find().populate('author', '_id email role')
+    .then(posts => {
+      res.status(200).json(posts);
+    }).catch(error => {
+      res.status(500).json(error);
+    });
 };
 
 exports.getById = (req, res, next) => {
-  PostAccessInfoSchema.findById(req.params.id).then(post => {
+  Post.findById(req.params.id).then(post => {
     res.status(200).json(post);
   }).catch(error => {
     res.status(500).json(error);
@@ -34,13 +35,13 @@ exports.getById = (req, res, next) => {
 
 exports.update = (req, res, next) => {
   const post = {
-    author: req.body.author,
+    author: req.userData.userId,
     content: req.body.content,
     status: req.body.status,
     title: req.body.title,
     updated: Date.now()
   };
-  PostAccessInfoSchema.updateOne({ _id: req.params.id }, {$set: post})
+  Post.updateOne({ _id: req.params.id }, {$set: post})
     .then(post => {
       res.status(200).json(post);
     }).catch(error => {
@@ -50,7 +51,7 @@ exports.update = (req, res, next) => {
 
 exports.delete = (req, res, next) => {
   const id = req.params.id;
-  PostAccessInfoSchema.deleteOne({ _id: id})
+  Post.deleteOne({ _id: id})
     .then(id => {
       res.status(200).json(id);
     }).catch(error => {

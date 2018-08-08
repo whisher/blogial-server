@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
-const userAccessInfoSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
   avatar: { type: String, default: null },
   display_name: { type: String, required: true },
   email: { type: String, index: true, unique: true, required: true },
@@ -11,9 +11,13 @@ const userAccessInfoSchema = mongoose.Schema({
   lastname: { type: String, required: true },
   password: { type: String, required: true },
   role: { type: String, required: true, enum: ['admin', 'writer'] },
-  username: { type: String, required: true }
+  username: { type: String, required: true },
+  posts: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Post'
+  }]
 });
 
-userAccessInfoSchema.plugin(uniqueValidator);
+userSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model('userAccessInfo', userAccessInfoSchema);
+module.exports = mongoose.model('User', userSchema);
