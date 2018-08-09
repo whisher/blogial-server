@@ -14,8 +14,7 @@ exports.signup = (req, res, next) => {
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       password: hash,
-      role: req.body.role,
-      username: req.body.username
+      role: req.body.role
     });
     userAccessInfo.save().then(user => {
       const token = jwt.sign(
@@ -23,9 +22,8 @@ exports.signup = (req, res, next) => {
           avatar: user.avatar,
           display_name: user.display_name,
           email: user.email,
-          role: user.role,
           _id: user._id,
-          username: user.username
+          role: user.role
         },
         config.secret,
         { expiresIn: '1h' }
@@ -61,9 +59,8 @@ exports.login = (req, res, next) => {
             avatar: user.avatar,
             display_name: user.display_name,
             email: user.email,
-            role: user.role,
             _id: user._id,
-            username: user.username
+            role: user.role
           },
           config.secret,
           { expiresIn: '1h' }

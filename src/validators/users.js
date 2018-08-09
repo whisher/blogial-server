@@ -8,8 +8,7 @@ exports.signup = {
     firstname: Joi.string().required(),
     password: Joi.string().required(),
     lastname: Joi.string().required(),
-    role: Joi.string().required(),
-    username: Joi.string().required()
+    role: Joi.string().required()
   }
 };
 

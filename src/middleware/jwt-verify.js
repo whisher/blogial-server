@@ -11,9 +11,8 @@ module.exports = (req, res, next) => {
       avatar: decodedToken.avatar,
       display_name: decodedToken.display_name,
       email: decodedToken.email,
-      role: decodedToken.role,
       _id: decodedToken._id,
-      username: decodedToken.username
+      role: decodedToken.role
     };
     next();
   } catch (error) {

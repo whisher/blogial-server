@@ -7,11 +7,12 @@ const postSchema = mongoose.Schema({
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   content: { type: String, required: true },
   created: { type: Date, default: Date.now },
-  isDraft: { type: Boolean},
+  isDraft: { type: Boolean, required: true},
   title: { type: String, required: true },
   updated: { type: Date, default: Date.now }
 });
 
 postSchema.plugin(uniqueValidator);
+
 
 module.exports = mongoose.model('Post', postSchema);

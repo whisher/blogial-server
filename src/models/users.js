@@ -11,7 +11,6 @@ const userSchema = mongoose.Schema({
   lastname: { type: String, required: true },
   password: { type: String, required: true },
   role: { type: String, required: true, enum: ['admin', 'writer'] },
-  username: { type: String, required: true },
   posts: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Post'
