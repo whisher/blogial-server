@@ -1,8 +1,7 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-const validate = require('express-validation');
-
+const { celebrate } = require('celebrate');
 const controllers = require('../controllers/users');
 const validators = require('../validators/users');
 const jwtVerify = require('../middleware/jwt-verify');
@@ -13,12 +12,12 @@ router.get('/account',
 );
 
 router.post('/login',
-  validate(validators.login),
+  celebrate(validators.login),
   controllers.login
 );
 
 router.post('/signup',
-  validate(validators.signup),
+  celebrate(validators.signup),
   controllers.signup
 );
 

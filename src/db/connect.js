@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const debug = require('debug')('api:server');
 
 const connection = (isProd) => {
-  const db = isProd ? 'production1' : 'development16';
+  const db = isProd ? 'production1' : 'development18';
   const uri = `mongodb+srv://ilwebdifabio:MdMxemXzx3KkSrA3@cluster0-uycvd.mongodb.net/${db}`;
   mongoose
     .connect(

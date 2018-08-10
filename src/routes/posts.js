@@ -1,15 +1,16 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-const validate = require('express-validation');
-
+const { celebrate } = require('celebrate');
 const controllers = require('../controllers/posts');
 const validators = require('../validators/posts');
 const jwtVerify = require('../middleware/jwt-verify');
+const extractFile = require('../middleware/image');
 
 router.post('',
-  validate(validators.create),
+  // celebrate(validators.create),
   jwtVerify,
+  extractFile,
   controllers.create
 );
 
@@ -25,6 +26,7 @@ router.get('/:id',
 
 router.put('/:id',
   jwtVerify,
+  extractFile,
   controllers.update
 );
 
