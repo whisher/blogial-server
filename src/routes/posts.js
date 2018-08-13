@@ -1,9 +1,9 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-const { celebrate } = require('celebrate');
+// const { celebrate } = require('celebrate');
 const controllers = require('../controllers/posts');
-const validators = require('../validators/posts');
+// const validators = require('../validators/posts');
 const jwtVerify = require('../middleware/jwt-verify');
 const extractFile = require('../middleware/image');
 

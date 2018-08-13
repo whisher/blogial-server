@@ -1,19 +1,21 @@
 'use strict';
 const path = require('path');
 const express = require('express');
-const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const { errors } = require('celebrate');
-const cors = require('cors');
 const app = express();
+const helmet = require('helmet');
+const cors = require('cors');
+const { errors } = require('celebrate');
 
 const isProd = (process.env.NODE_ENV === 'production');
 
 require('./db/connect')(isProd);
 
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(errors());
+app.use(helmet());
 app.use(cors());
+app.use(errors());
 
 app.use('/images', express.static(path.join('images')));
 
