@@ -16,7 +16,8 @@ app.use(bodyParser.json());
 app.use(helmet());
 app.use(cors());
 app.use(errors());
-
+// heroku to get https protocol
+app.enable('trust proxy');
 app.use('/images', express.static(path.join('images')));
 
 // Users

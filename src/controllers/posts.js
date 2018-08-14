@@ -3,7 +3,7 @@
 const Post = require('../models/posts');
 
 const getProtocol = (req) => {
-  return (req.connection && req.connection.encrypted ? 'https' : 'http');
+  return req.secure ? 'https' : 'http';
 };
 
 exports.create = (req, res, next) => {
