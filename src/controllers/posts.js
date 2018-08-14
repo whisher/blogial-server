@@ -8,6 +8,8 @@ exports.create = (req, res, next) => {
     author: req.userData,
     content: req.body.content,
     imagePath: url + '/images/' + req.file.filename,
+    files: JSON.parse(req.body.files),
+    places: JSON.parse(req.body.places),
     isDraft: req.body.isDraft,
     status: req.body.status,
     title: req.body.title
@@ -31,6 +33,8 @@ exports.update = (req, res, next) => {
     author: req.userData,
     content: req.body.content,
     imagePath: imagePath,
+    files: JSON.parse(req.body.files),
+    places: JSON.parse(req.body.places),
     isDraft: req.body.isDraft,
     status: req.body.status,
     title: req.body.title,
@@ -47,7 +51,7 @@ exports.update = (req, res, next) => {
 
 exports.all = (req, res, next) => {
   Post.find().populate('author', '_id email role display_name')
-    .sort({ created: -1 })
+    .sort({ created: 1 })
     .then(posts => {
       res.status(200).json(posts);
     }).catch(error => {
@@ -73,4 +77,12 @@ exports.delete = (req, res, next) => {
     }).catch(error => {
       res.status(500).json(error);
     });
+};
+
+exports.gallery = (req, res, next) => {
+  const url = req.protocol + '://' + req.get('host');
+  const src = url + '/' + req.file.path;
+  const name = req.file.originalname;
+  const data = {src: src, name: name};
+  res.status(200).json(data);
 };

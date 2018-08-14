@@ -4,11 +4,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const config = require('../config/config');
-const UserAccessInfo = require('../models/users');
+const User = require('../models/users');
 
 exports.signup = (req, res, next) => {
   bcrypt.hash(req.body.password, 10).then(hash => {
-    const userAccessInfo = new UserAccessInfo({
+    const userAccessInfo = new User({
       display_name: req.body.display_name,
       email: req.body.email,
       firstname: req.body.firstname,
@@ -40,7 +40,7 @@ exports.signup = (req, res, next) => {
 
 exports.login = (req, res, next) => {
   let fetchedUser;
-  UserAccessInfo.findOne({ email: req.body.email })
+  User.findOne({ email: req.body.email })
     .then(user => {
       if (!user) {
         return res.status(401).json({

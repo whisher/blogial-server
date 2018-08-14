@@ -6,12 +6,19 @@ const controllers = require('../controllers/posts');
 // const validators = require('../validators/posts');
 const jwtVerify = require('../middleware/jwt-verify');
 const extractFile = require('../middleware/image');
+const extractGallery = require('../middleware/gallery');
 
 router.post('',
   // celebrate(validators.create),
   jwtVerify,
   extractFile,
   controllers.create
+);
+
+router.post('/gallery',
+  jwtVerify,
+  extractGallery,
+  controllers.gallery
 );
 
 router.get('',
