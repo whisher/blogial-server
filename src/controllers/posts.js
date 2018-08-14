@@ -2,8 +2,12 @@
 'use strict';
 const Post = require('../models/posts');
 
+const getProtocol = (req) => {
+  return (req.connection && req.connection.encrypted ? 'https' : 'http');
+};
+
 exports.create = (req, res, next) => {
-  const url = req.protocol + '://' + req.get('host');
+  const url = getProtocol(req) + '://' + req.get('host');
   const post = new Post({
     author: req.userData,
     content: req.body.content,
@@ -26,7 +30,7 @@ exports.create = (req, res, next) => {
 exports.update = (req, res, next) => {
   let imagePath = req.body.image;
   if (req.file) {
-    const url = req.protocol + '://' + req.get('host');
+    const url = getProtocol(req) + '://' + req.get('host');
     imagePath = url + '/images/' + req.file.filename;
   }
   const postData = {
@@ -80,7 +84,7 @@ exports.delete = (req, res, next) => {
 };
 
 exports.gallery = (req, res, next) => {
-  const url = req.protocol + '://' + req.get('host');
+  const url = getProtocol(req) + '://' + req.get('host');
   const src = url + '/' + req.file.path;
   const name = req.file.originalname;
   const data = {src: src, name: name};
