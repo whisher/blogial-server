@@ -1,16 +1,24 @@
 'use strict';
-const path = require('path');
-const express = require('express');
 const bodyParser = require('body-parser');
-const app = express();
-const helmet = require('helmet');
 const cors = require('cors');
 const { errors } = require('celebrate');
+const express = require('express');
+const helmet = require('helmet');
+const path = require('path');
+const webpush = require('web-push');
 
+// Notification
+const config = require('./config/config');
+webpush.setVapidDetails('mailto:' + config.vapidEmail,
+  config.vapidPublicKey,
+  config.vapidPrivateKey);
+
+// Db
 const isProd = (process.env.NODE_ENV === 'production');
-
 require('./db/connect')(isProd);
 
+// Express
+const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(helmet());
@@ -27,6 +35,10 @@ app.use('/api/users', users);
 // Posts
 const posts = require('./routes/posts');
 app.use('/api/posts', posts);
+
+// Pwa
+const pwa = require('./routes/pwa');
+app.use('/pwa', pwa);
 
 // error validation handler
 app.use(function(err, req, res, next){
