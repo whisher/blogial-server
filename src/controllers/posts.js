@@ -1,17 +1,36 @@
 /*eslint max-len: ['error', { 'code': 130 }]*/
 'use strict';
+const fs = require('fs');
+const sharp = require('sharp');
 const Post = require('../models/posts');
 
-const getProtocol = (req) => {
-  return req.secure ? 'https' : 'http';
+const getUrl = (req) => {
+  return (req.secure ? 'https' : 'http') + '://' + req.get('host');
+};
+
+const createThumb = (imageName) => {
+  const prefix = 'thumb_';
+  const imagePath = './images/';
+  const readableStream = fs.createReadStream(imagePath + imageName);
+  const writableStream = fs.createWriteStream(imagePath + prefix + imageName);
+  const transformer = sharp()
+    .resize(1440, 300)
+    .crop(sharp.strategy.entropy)
+    .on('error', function(err) {
+      console.log('sharp ', err);
+    });
+  readableStream.pipe(transformer).pipe(writableStream);
+  return prefix + imageName;
 };
 
 exports.create = (req, res, next) => {
-  const url = getProtocol(req) + '://' + req.get('host');
+  const url = getUrl(req);
+  const imageName = createThumb(req.file.filename);
+  const imagePath = url + '/images/' + imageName;
   const post = new Post({
     author: req.userData,
     content: req.body.content,
-    imagePath: url + '/images/' + req.file.filename,
+    imagePath: imagePath,
     files: JSON.parse(req.body.files),
     places: JSON.parse(req.body.places),
     isDraft: req.body.isDraft,
@@ -30,8 +49,9 @@ exports.create = (req, res, next) => {
 exports.update = (req, res, next) => {
   let imagePath = req.body.image;
   if (req.file) {
-    const url = getProtocol(req) + '://' + req.get('host');
-    imagePath = url + '/images/' + req.file.filename;
+    const url = getUrl(req);
+    const imageName = createThumb(req.file.filename);
+    imagePath = url + '/images/' + imageName;
   }
   const postData = {
     author: req.userData,
@@ -55,7 +75,7 @@ exports.update = (req, res, next) => {
 
 exports.all = (req, res, next) => {
   Post.find().populate('author', '_id email role display_name')
-    .sort({ created: 1 })
+    .sort({ created: -1 })
     .then(posts => {
       res.status(200).json(posts);
     }).catch(error => {
@@ -84,7 +104,7 @@ exports.delete = (req, res, next) => {
 };
 
 exports.gallery = (req, res, next) => {
-  const url = getProtocol(req) + '://' + req.get('host');
+  const url = getUrl(req);
   const src = url + '/' + req.file.path;
   const name = req.file.originalname;
   const data = {src: src, name: name};
