@@ -1,7 +1,9 @@
 /*eslint max-len: ['error', { 'code': 130 }]*/
 'use strict';
 const fs = require('fs');
+const pump = require('pump');
 const sharp = require('sharp');
+
 const Post = require('../models/posts');
 
 const getUrl = (req) => {
@@ -14,12 +16,16 @@ const createThumb = (imageName) => {
   const readableStream = fs.createReadStream(imagePath + imageName);
   const writableStream = fs.createWriteStream(imagePath + prefix + imageName);
   const transformer = sharp()
-    .resize(1440, 300)
+    .resize(1110, 250)
     .crop(sharp.strategy.entropy)
     .on('error', function(err) {
       console.log('sharp ', err);
     });
-  readableStream.pipe(transformer).pipe(writableStream);
+  pump(readableStream, transformer, writableStream, function(err) {
+    if (err) {
+      console.log('pipe sharp finished', err);
+    }
+  });
   return prefix + imageName;
 };
 

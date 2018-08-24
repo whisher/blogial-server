@@ -22,7 +22,6 @@ router.post('/gallery',
 );
 
 router.get('',
-  jwtVerify,
   controllers.all
 );
 
