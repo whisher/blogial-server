@@ -4,12 +4,13 @@ const webpush = require('web-push');
 const Subscription = require('../models/subscription');
 
 exports.subscription = (req, res, next) => {
+  const body = JSON.stringify(req.body);
   const subscription = new Subscription({
-    subscriber: req.body
+    subscriber: body
   });
   subscription.save()
     .then(data => {
-      res.status(200);
+      res.status(200).json(data);
     }).catch(error => {
       res.status(500).json(error);
     });
