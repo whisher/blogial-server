@@ -32,6 +32,7 @@ exports.notification = (req, res, next) => {
           webpush.sendNotification(
             subscription,
             JSON.stringify(notificationPayload))
+            .then((response) => response)
         );
       });
       Promise.all(promises).then((response) => res.status(200).json(response));
