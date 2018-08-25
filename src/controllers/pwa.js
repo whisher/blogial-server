@@ -26,15 +26,21 @@ exports.notification = (req, res, next) => {
   };
   Subscription.find()
     .then(subscriptions => {
-      const promises = [];
       subscriptions.forEach(subscription => {
-        promises.push(
-          webpush.sendNotification(
-            subscription,
-            JSON.stringify(notificationPayload))
-        );
+        webpush.sendNotification(
+          subscription,
+          JSON.stringify(notificationPayload))
+          .then((response) => {
+            console.log('Status : ' + response.statusCode);
+            console.log('Headers : ' + response.headers);
+            console.log('Body : ' + JSON.stringify(response.body));
+          })
+          .catch((error) => {
+            console.log('Status : ' + error.statusCode);
+            console.log('Headers : ' + JSON.stringify(error.headers));
+            console.log('Body : ' + JSON.stringify(error.body));
+          });
       });
-      Promise.all(promises).then(() => res.sendStatus(200));
     }).catch(error => {
       res.status(500).json(error);
     });
