@@ -27,14 +27,30 @@ exports.notification = (req, res, next) => {
   Subscription.find()
     .then(subscriptions => {
       const promises = [];
-      subscriptions.forEach(subscription => {
+      for (var i = 0, len = subscriptions.length; i < len; i++) {
+        let subscription = subscriptions[i].subscriber;
+        let pushSubscription = JSON.parse(subscription);
         promises.push(
           webpush.sendNotification(
-            subscription,
+            {
+              endpoint: pushSubscription.endpoint,
+              keys: pushSubscription.keys
+            },
             JSON.stringify(notificationPayload))
             .then((response) => response)
         );
-      });
+      }
+      /*subscriptions.forEach(subscription => {
+        const subscriber = JSON.parse(subscription).subscriber;
+        console.log('subscriber',subscriber);
+        promises.push(
+          webpush.sendNotification(
+            JSON.parse(subscription),
+            JSON.stringify(notificationPayload))
+            .then((response) => response)
+            .catch(err=>console.log(err))
+        );
+      });*/
       return Promise.all(promises);
     }).then((response) => {
       res.status(200).json(response);
