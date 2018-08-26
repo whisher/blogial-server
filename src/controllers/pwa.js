@@ -35,7 +35,9 @@ exports.notification = (req, res, next) => {
             .then((response) => response)
         );
       });
-      Promise.all(promises).then((response) => res.status(200).json(response));
+      return Promise.all(promises);
+    }).then((response) => {
+      res.status(200).json(response);
     }).catch(error => {
       res.status(500).json(error);
     });
