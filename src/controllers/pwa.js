@@ -15,7 +15,7 @@ exports.subscription = (req, res, next) => {
       res.status(500).json(error);
     });
 };
-
+/*
 exports.notification = (req, res, next) => {
   const notificationPayload = {
     notification: {
@@ -40,7 +40,7 @@ exports.notification = (req, res, next) => {
             .then((response) => response)
         );
       }
-      /*subscriptions.forEach(subscription => {
+      subscriptions.forEach(subscription => {
         const subscriber = JSON.parse(subscription).subscriber;
         console.log('subscriber',subscriber);
         promises.push(
@@ -50,11 +50,53 @@ exports.notification = (req, res, next) => {
             .then((response) => response)
             .catch(err=>console.log(err))
         );
-      });*/
+      });
       return Promise.all(promises);
     }).then((response) => {
       res.status(200).json(response);
     }).catch(error => {
+      res.status(500).json(error);
+    });
+};
+*/
+const triggerPushMsg = function(subscription, dataToSend) {
+  return webpush.sendNotification(subscription, dataToSend)
+    .catch((err) => {
+      if (err.statusCode === 410) {
+        return Subscription.findOneAndRemove({ _id: subscription._id})();
+      } else {
+        console.log('Subscription is no longer valid: ', err);
+      }
+    });
+};
+exports.notification = (req, res, next) => {
+  const notificationPayload = {
+    notification: {
+      title: 'Blogial new post',
+      body: req.body.title,
+      icon: 'assets/icons/icon-512x512.png'
+    }
+  };
+  Subscription.find()
+    .then((subscriptions) => {
+      let promiseChain = Promise.resolve();
+      for (let i = 0; i < subscriptions.length; i++) {
+        let subscription = subscriptions[i].subscriber;
+        let pushSubscription = JSON.parse(subscription);
+        let buildPushSubscription = {
+          endpoint: pushSubscription.endpoint,
+          keys: pushSubscription.keys
+        };
+        promiseChain = promiseChain.then(() => {
+          return triggerPushMsg(buildPushSubscription, notificationPayload);
+        });
+      }
+      return promiseChain;
+    })
+    .then((response) => {
+      res.status(200).json(response);
+    })
+    .catch(error => {
       res.status(500).json(error);
     });
 };
