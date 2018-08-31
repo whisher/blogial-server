@@ -84,7 +84,7 @@ exports.update = (req, res, next) => {
 
 exports.all = (req, res, next) => {
   Post.find().populate('author', '_id email role display_name')
-    .sort({ created: -1 })
+    .sort({ created: 1 })
     .then(posts => {
       const published = posts.filter((post) => {
         if (!req.headers.authorization && post.isDraft) {
