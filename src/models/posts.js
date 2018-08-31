@@ -11,6 +11,7 @@ const postSchema = mongoose.Schema({
   files: { type: Array, default: []},
   isDraft: { type: Boolean, required: true},
   places: { type: Array, default: []},
+  slug: { type: String, required: true, unique: true},
   title: { type: String, required: true },
   updated: { type: Date, default: Date.now }
 });

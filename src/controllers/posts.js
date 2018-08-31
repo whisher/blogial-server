@@ -3,6 +3,7 @@
 const fs = require('fs');
 const pump = require('pump');
 const sharp = require('sharp');
+const slugify = require('node-slugify');
 
 const Post = require('../models/posts');
 
@@ -40,6 +41,7 @@ exports.create = (req, res, next) => {
     files: JSON.parse(req.body.files),
     places: JSON.parse(req.body.places),
     isDraft: req.body.isDraft,
+    slug: slugify(req.body.title),
     status: req.body.status,
     title: req.body.title
   });
@@ -67,6 +69,7 @@ exports.update = (req, res, next) => {
     places: JSON.parse(req.body.places),
     isDraft: req.body.isDraft,
     status: req.body.status,
+    slug: slugify(req.body.title),
     title: req.body.title,
     updated: Date.now()
   };
@@ -83,7 +86,13 @@ exports.all = (req, res, next) => {
   Post.find().populate('author', '_id email role display_name')
     .sort({ created: -1 })
     .then(posts => {
-      res.status(200).json(posts);
+      const published = posts.filter((post) => {
+        if (!req.headers.authorization && post.isDraft) {
+          return false;
+        }
+        return true;
+      });
+      res.status(200).json(published);
     }).catch(error => {
       res.status(500).json(error);
     });

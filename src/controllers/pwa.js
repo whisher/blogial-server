@@ -60,10 +60,16 @@ exports.notification = (req, res, next) => {
 };
 */
 const triggerPushMsg = function(subscription, dataToSend) {
-  return webpush.sendNotification(subscription, dataToSend)
+  let _subscription = subscription.subscriber;
+  let pushSubscription = JSON.parse(_subscription);
+  let buildPushSubscription = {
+    endpoint: pushSubscription.endpoint,
+    keys: pushSubscription.keys
+  };
+  return webpush.sendNotification(buildPushSubscription, dataToSend)
     .catch((err) => {
       if (err.statusCode === 410) {
-        return Subscription.findOneAndRemove({ _id: subscription._id})();
+        return Subscription.findOneAndRemove({ _id: subscription._id});
       } else {
         console.log('Subscription is no longer valid: ', err);
       }
@@ -81,14 +87,9 @@ exports.notification = (req, res, next) => {
     .then((subscriptions) => {
       let promiseChain = Promise.resolve();
       for (let i = 0; i < subscriptions.length; i++) {
-        let subscription = subscriptions[i].subscriber;
-        let pushSubscription = JSON.parse(subscription);
-        let buildPushSubscription = {
-          endpoint: pushSubscription.endpoint,
-          keys: pushSubscription.keys
-        };
+        let subscription = subscriptions[i];
         promiseChain = promiseChain.then(() => {
-          return triggerPushMsg(buildPushSubscription, notificationPayload);
+          return triggerPushMsg(subscription, notificationPayload);
         });
       }
       return promiseChain;
