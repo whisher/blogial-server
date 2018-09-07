@@ -32,6 +32,10 @@ app.use('/images', express.static(path.join('images')));
 const users = require('./routes/users');
 app.use('/api/users', users);
 
+// Account
+const account = require('./routes/account');
+app.use('/api/account', account);
+
 // Posts
 const posts = require('./routes/posts');
 app.use('/api/posts', posts);

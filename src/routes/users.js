@@ -5,20 +5,39 @@ const { celebrate } = require('celebrate');
 const controllers = require('../controllers/users');
 const validators = require('../validators/users');
 const jwtVerify = require('../middleware/jwt-verify');
+const avatar = require('../middleware/avatar');
 
-router.get('/account',
+router.post('',
+  //celebrate(validators.signup),
   jwtVerify,
-  controllers.account
+  avatar,
+  controllers.create
+);
+
+router.put('/:id',
+  jwtVerify,
+  avatar,
+  controllers.update
+);
+
+router.get('',
+  jwtVerify,
+  controllers.all
+);
+
+router.get('/:id',
+  jwtVerify,
+  controllers.getById
+);
+
+router.delete('/:id',
+  jwtVerify,
+  controllers.delete
 );
 
 router.post('/login',
   celebrate(validators.login),
   controllers.login
-);
-
-router.post('/signup',
-  celebrate(validators.signup),
-  controllers.signup
 );
 
 module.exports = router;

@@ -15,12 +15,6 @@ router.post('',
   controllers.create
 );
 
-router.post('/gallery',
-  jwtVerify,
-  extractGallery,
-  controllers.gallery
-);
-
 router.get('',
   controllers.all
 );
@@ -40,5 +34,12 @@ router.delete('/:id',
   jwtVerify,
   controllers.delete
 );
+
+router.post('/gallery',
+  jwtVerify,
+  extractGallery,
+  controllers.gallery
+);
+
 
 module.exports = router;
