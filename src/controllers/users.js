@@ -150,10 +150,13 @@ exports.login = (req, res, next) => {
         }
         const token = jwt.sign(
           {
+            _id: user._id,
             avatar: user.avatar,
             display_name: user.display_name,
             email: user.email,
-            _id: user._id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            last_login: Date.now(),
             role: user.role
           },
           config.secret,

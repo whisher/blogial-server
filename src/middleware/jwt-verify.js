@@ -8,10 +8,13 @@ module.exports = (req, res, next) => {
     const token = req.headers.authorization;
     const decodedToken = jwt.verify(token, config.secret);
     req.userData = {
+      _id: decodedToken._id,
       avatar: decodedToken.avatar,
       display_name: decodedToken.display_name,
       email: decodedToken.email,
-      _id: decodedToken._id,
+      firstname: decodedToken.firstname,
+      lastname: decodedToken.lastname,
+      last_login: decodedToken.last_login,
       role: decodedToken.role
     };
     next();
