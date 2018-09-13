@@ -30,13 +30,6 @@ const createThumb = (imageName) => {
   return prefix + imageName;
 };
 
-const tagsTrasformLowercase = (tags) => {
-  const lowerTags = JSON.parse(tags).map(tag => {
-    return {display: tag.display.toLowerCase(), value: tag.value.toLowerCase()};
-  });
-  return JSON.stringify(lowerTags);
-};
-
 exports.create = (req, res, next) => {
   const url = getUrl(req);
   const imageName = createThumb(req.file.filename);
@@ -50,7 +43,7 @@ exports.create = (req, res, next) => {
     isDraft: req.body.isDraft,
     slug: slugify(req.body.title),
     status: req.body.status,
-    tags: tagsTrasformLowercase(req.body.tags),
+    tags: req.body.tags,
     title: req.body.title
   });
   post.populate('author', '_id email role display_name').execPopulate();
@@ -78,7 +71,7 @@ exports.update = (req, res, next) => {
     isDraft: req.body.isDraft,
     status: req.body.status,
     slug: slugify(req.body.title),
-    tags: tagsTrasformLowercase(req.body.tags),
+    tags: req.body.tags,
     title: req.body.title,
     updated: Date.now()
   };
