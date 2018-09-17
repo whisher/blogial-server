@@ -1,6 +1,7 @@
 /*eslint max-len: ['error', { 'code': 130 }]*/
 'use strict';
 const fs = require('fs');
+const path = require('path');
 const pump = require('pump');
 const sharp = require('sharp');
 const slugify = require('node-slugify');
@@ -30,31 +31,6 @@ const createThumb = (imageName) => {
   return prefix + imageName;
 };
 
-const createGallery = (req, res) => {
-  const prefix = 'gallery_';
-  const imagePath = './images/';
-  const readableStream = fs.createReadStream(imagePath + req.file.filename);
-  const writableStream = fs.createWriteStream(imagePath + prefix + req.file.filename);
-  const transformer = sharp()
-    .resize(1110, 600)
-    .crop(sharp.strategy.entropy)
-    .on('error', function(err) {
-      console.log('sharp ', err);
-    });
-  pump(readableStream, transformer, writableStream, function(err) {
-    if (err) {
-      console.log('pipe sharp finished', err);
-      res.status(500);
-    }
-    const imageName = prefix + req.file.filename;
-    const url = getUrl(req);
-    const imagePath = url + '/images/' + imageName;
-    const src = imagePath;
-    const name = req.file.originalname;
-    const data = {src: src, name: name};
-    res.status(200).json(data);
-  });
-};
 exports.create = (req, res, next) => {
   const url = getUrl(req);
   const imageName = createThumb(req.file.filename);
@@ -146,14 +122,27 @@ exports.delete = (req, res, next) => {
 };
 
 exports.gallery = (req, res, next) => {
-  createGallery(req, res);
+  const imagePath = './images/';
+  const sizes = [200, 800];
+  const image = `${imagePath}${req.file.filename}`;
+  const ext = path.extname(image);
+  const filename = path.basename(image, ext);
+  const resize = size => sharp(`${image}`)
+    .resize(size, size)
+    .toFile(`${imagePath}${filename}-${size}${ext}`);
+  Promise
+    .all(sizes.map(resize))
+    .then(metadata => {
+      return metadata;
+    })
+    .then(metadata => {
+      const url = getUrl(req);
+      const images = sizes.map(size => {
+        const name = `${filename}-${size}`;
+        const src = url + '/images/' + `${name}${ext}`;
+        const data = {src: src, name: name};
+        return data;
+      });
+      res.status(200).json(images);
+    });
 };
-/*
-exports.gallery = (req, res, next) => {
-  const url = getUrl(req);
-  const src = url + '/' + req.file.path;
-  const name = req.file.originalname;
-  const data = {src: src, name: name};
-  res.status(200).json(data);
-};
-*/
