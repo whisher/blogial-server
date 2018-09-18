@@ -8,7 +8,7 @@ const postSchema = mongoose.Schema({
   content: { type: String, required: true },
   created: { type: Number, default: Date.now },
   imagePath: { type: String, required: true},
-  files: { type: Array, default: []},
+  images: { type: Array, default: []},
   isDraft: { type: Boolean, required: true},
   places: { type: Array, default: []},
   slug: { type: String, required: true, unique: true},

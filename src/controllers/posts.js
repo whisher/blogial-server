@@ -39,7 +39,7 @@ exports.create = (req, res, next) => {
     author: req.userData,
     content: req.body.content,
     imagePath: imagePath,
-    files: req.body.files,
+    images: req.body.images,
     places: req.body.places,
     isDraft: req.body.isDraft,
     slug: slugify(req.body.title),
@@ -67,7 +67,7 @@ exports.update = (req, res, next) => {
     author: req.userData,
     content: req.body.content,
     imagePath: imagePath,
-    files: req.body.files,
+    images: req.body.images,
     places: req.body.places,
     isDraft: req.body.isDraft,
     status: req.body.status,
@@ -132,9 +132,6 @@ exports.gallery = (req, res, next) => {
     .toFile(`${imagePath}${filename}-${size}${ext}`);
   Promise
     .all(sizes.map(resize))
-    .then(metadata => {
-      return metadata;
-    })
     .then(metadata => {
       const url = getUrl(req);
       const images = sizes.map(size => {
