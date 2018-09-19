@@ -18,8 +18,8 @@ const createThumb = (imageName) => {
   const readableStream = fs.createReadStream(imagePath + imageName);
   const writableStream = fs.createWriteStream(imagePath + prefix + imageName);
   const transformer = sharp()
-    .resize(1110, 250)
-    .crop(sharp.strategy.entropy)
+    .resize(250, 250)
+    // .crop(sharp.strategy.entropy)
     .on('error', function(err) {
       console.log('sharp ', err);
     });
