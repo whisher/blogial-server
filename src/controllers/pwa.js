@@ -16,14 +16,9 @@ exports.subscription = (req, res, next) => {
     });
 };
 
-const triggerPushMsg = function(subscription, dataToSend) {
-  let _subscription = subscription.subscriber;
-  let pushSubscription = _subscription;
-  let buildPushSubscription = {
-    endpoint: pushSubscription.endpoint,
-    keys: pushSubscription.keys
-  };
-  return webpush.sendNotification(buildPushSubscription, dataToSend)
+const triggerPushMsg = (subscription, dataToSend) => {
+  let subscriber = JSON.parse(subscription.subscriber);
+  return webpush.sendNotification(subscriber, JSON.stringify(dataToSend))
     .catch((err) => {
       if (err.statusCode === 410) {
         return Subscription.findOneAndRemove({ _id: subscription._id});
@@ -44,8 +39,7 @@ exports.notification = (req, res, next) => {
     .then((subscriptions) => {
       let promiseChain = Promise.resolve();
       for (let i = 0; i < subscriptions.length; i++) {
-        let subscription = JSON.parse(subscriptions[i].subscription);
-        console.log('subscription', subscription);
+        let subscription = subscriptions[i];
         promiseChain = promiseChain.then(() => {
           return triggerPushMsg(subscription, notificationPayload);
         });
