@@ -4,7 +4,7 @@ const webpush = require('web-push');
 const Subscription = require('../models/subscription');
 
 exports.subscription = (req, res, next) => {
-  const body = req.body;
+  const body = JSON.stringify(req.body);
   const subscription = new Subscription({
     subscriber: body
   });
@@ -44,7 +44,8 @@ exports.notification = (req, res, next) => {
     .then((subscriptions) => {
       let promiseChain = Promise.resolve();
       for (let i = 0; i < subscriptions.length; i++) {
-        let subscription = subscriptions[i];
+        let subscription = JSON.parse(subscriptions[i].subscription);
+        console.log('subscription', subscription);
         promiseChain = promiseChain.then(() => {
           return triggerPushMsg(subscription, notificationPayload);
         });
