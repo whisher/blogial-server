@@ -1,1 +1,2 @@
-Remagi server
+# Blogial-Server
+## Simple blog with express + mongoDb
